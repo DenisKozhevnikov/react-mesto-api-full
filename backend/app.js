@@ -2,6 +2,7 @@ require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
 const { celebrate, Joi, errors } = require('celebrate');
+const cors = require('cors');
 
 const usersRoutes = require('./routes/users');
 const cardsRoutes = require('./routes/cards');
@@ -21,6 +22,8 @@ const mongoConnectOptions = {
 };
 
 mongoose.connect(mongoDbUrl, mongoConnectOptions);
+
+app.use(cors());
 
 app.use(requestLogger);
 app.use(express.urlencoded({ extended: true }));
