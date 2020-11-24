@@ -30,11 +30,7 @@ app.post('/signin', celebrate({
   body: Joi.object().keys({
     email: Joi.string().required().email().max(40),
     password: Joi.string().required().min(8),
-  }),
-  headers: Joi.object().keys({
-    authorization: Joi.string().required().length(179),
-    'content-type': 'application/json',
-  }).unknown(true),
+  })
 }), login);
 
 app.post('/signup', celebrate({
@@ -45,10 +41,6 @@ app.post('/signup', celebrate({
     email: Joi.string().required().email(),
     password: Joi.string().required().min(8),
   }),
-  headers: Joi.object().keys({
-    authorization: Joi.string().required().length(179),
-    'content-type': 'application/json',
-  }).unknown(true),
 }), createUser);
 
 app.use('/users', auth, usersRoutes);
