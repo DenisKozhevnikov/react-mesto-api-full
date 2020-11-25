@@ -96,7 +96,7 @@ class Api {
 }
 
 const api = new Api({
-  baseUrl: `http://api.denisk.students.nomoreparties.xyz`,
+  baseUrl: `https://api.denisk.students.nomoreparties.xyz`,
 });
 
 export default api;
