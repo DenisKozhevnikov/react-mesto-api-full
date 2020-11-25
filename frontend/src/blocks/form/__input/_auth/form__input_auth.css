@@ -1,3 +1,13 @@
+/* browser autocomplete styles */
+.form__input_auth:-webkit-autofill,
+.form__input_auth:-webkit-autofill:hover, 
+.form__input_auth:-webkit-autofill:focus {
+  border: 1px solid border;
+  -webkit-text-fill-color: white;
+  -webkit-box-shadow: 0 0 0px 1000px transparent inset;
+  transition: background-color 5000s ease-in-out 0s;
+}
+
 .form__input_auth {
   border-bottom: 2px solid #ccc;
   color: #fff;

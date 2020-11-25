@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect } from "react";
-import { Switch, Route, useHistory, Redirect } from "react-router-dom";
+import { Switch, Route, useHistory } from "react-router-dom";
 import Header from "./Header";
 import Main from "./Main";
 import Footer from "./Footer";
@@ -33,6 +33,7 @@ function App() {
     false
   );
   const [email, setEmail] = useState("");
+  const [tok, setTok] = useState("");
   const history = useHistory();
 
   function handleEditProfileClick() {
@@ -115,7 +116,8 @@ function App() {
       .catch((err) => console.log(err));
   }
 
-  function onRegister(...props) { // password, email
+  function onRegister(...props) {
+    // password, email
     setNewUser(...props)
       .then((data) => {
         if (data) {
@@ -131,13 +133,19 @@ function App() {
       });
   }
 
-  function onLogin(...props) {  // password, email
+  function onLogin(...props) {
+    // password, email
     onUserLogin(...props)
       .then((data) => {
         if (data) {
           setToken(data.token);
+          setTok(data.token);
           setLoggedIn(true);
-          setEmail(email);
+          onGetContent(data.token).then((data) => {
+            if (data) {
+              setEmail(data.email);
+            }
+          });
           history.push("/");
         }
       })
@@ -156,7 +164,7 @@ function App() {
 
   function getContent(token) {
     onGetContent(token)
-      .then(({ data }) => {
+      .then((data) => {
         if (data) {
           setEmail(data.email);
           setLoggedIn(true);
@@ -172,7 +180,7 @@ function App() {
     if (!token) {
       return;
     }
-
+    setTok(token);
     getContent(token);
   }
 
@@ -181,64 +189,66 @@ function App() {
   }, []);
 
   useEffect(() => {
-    Promise.all([api.getUserInfo(), api.getItems()])
-      .then(([user, items]) => {
-        setCurrentUser(user);
-        setCards(items);
-      })
-      .catch((err) => console.log(err));
-  }, []);
+    if (tok) {
+      Promise.all([api.getUserInfo(), api.getItems()])
+        .then(([user, items]) => {
+          setCurrentUser(user);
+          setCards(items);
+        })
+        .catch((err) => console.log(err));
+    }
+  }, [tok]);
 
   return (
     <CurrentUserContext.Provider value={currentUser}>
-      <div className="page">
-        <div className="container">
-          <Header email={email} onSignOut={onSignOut} />
-          <Switch>
-            <Route exact path="/signup">
-              <Register onRegister={onRegister} />
-            </Route>
-            <Route exact path="/signin">
-              <Login onLogin={onLogin} />
-            </Route>
-            <ProtectedRoute
-              path="/"
-              loggedIn={loggedIn}
-              component={Main}
-              onEditProfile={handleEditProfileClick}
-              onAddPlace={handleAddPlaceClick}
-              onEditAvatar={handleEditAvatarClick}
-              onCardClick={handleCardClick}
-              cards={cards}
-              onCardLike={handleCardLike}
-              onCardDelete={handleCardDelete}
-            ></ProtectedRoute>
-          </Switch>
-          <Footer />
-        </div>
-        <EditProfilePopup
-          isOpen={isEditProfilePopupOpen}
-          onClose={closeAllPopups}
-          onUpdateUser={handleUpdateUser}
-        />
-        <EditAvatarPopup
-          isOpen={isEditAvatarPopupOpen}
-          onClose={closeAllPopups}
-          onUpdateAvatar={handleUpdateAvatar}
-        />
-        <AddPlacePopup
-          isOpen={isAddPlacePopupOpen}
-          onClose={closeAllPopups}
-          onAddPlace={handleAddPlace}
-        />
-
-        <PopupWithImage card={selectedCard} onClose={closeAllPopups} />
-        <InfoTooltip
-          isOpen={isInfoToolTipPopupOpen}
-          onClose={closeAllPopups}
-          isRegistrationSuccessful={isRegistrationSuccessful}
-        />
+      <div className="container">
+        <Header email={email} onSignOut={onSignOut} />
+        <Switch>
+          <Route exact path="/signup">
+            <Register onRegister={onRegister} />
+          </Route>
+          <Route exact path="/signin">
+            <Login onLogin={onLogin} />
+          </Route>
+          <ProtectedRoute
+            path="/"
+            loggedIn={loggedIn}
+            component={Main}
+            onEditProfile={handleEditProfileClick}
+            onAddPlace={handleAddPlaceClick}
+            onEditAvatar={handleEditAvatarClick}
+            onCardClick={handleCardClick}
+            cards={cards}
+            onCardLike={handleCardLike}
+            onCardDelete={handleCardDelete}
+            setCurrentUser={setCurrentUser}
+            setCards={setCards}
+          ></ProtectedRoute>
+        </Switch>
+        <Footer />
       </div>
+      <EditProfilePopup
+        isOpen={isEditProfilePopupOpen}
+        onClose={closeAllPopups}
+        onUpdateUser={handleUpdateUser}
+      />
+      <EditAvatarPopup
+        isOpen={isEditAvatarPopupOpen}
+        onClose={closeAllPopups}
+        onUpdateAvatar={handleUpdateAvatar}
+      />
+      <AddPlacePopup
+        isOpen={isAddPlacePopupOpen}
+        onClose={closeAllPopups}
+        onAddPlace={handleAddPlace}
+      />
+
+      <PopupWithImage card={selectedCard} onClose={closeAllPopups} />
+      <InfoTooltip
+        isOpen={isInfoToolTipPopupOpen}
+        onClose={closeAllPopups}
+        isRegistrationSuccessful={isRegistrationSuccessful}
+      />
     </CurrentUserContext.Provider>
   );
 }

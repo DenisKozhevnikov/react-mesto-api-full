@@ -1,7 +1,6 @@
 class Api {
   constructor({ baseUrl, headers }) {
     this._baseUrl = baseUrl;
-    this._headers = headers;
   }
 
   _response() {
@@ -15,7 +14,12 @@ class Api {
   }
 
   getUserInfo() {
-    return fetch(`${this._baseUrl}/users/me`, { headers: this._headers }).then(
+    return fetch(`${this._baseUrl}/users/me`, { 
+      headers:  {
+        authorization: `Bearer ${localStorage.jwt}`,
+        "Content-Type": "application/json",
+      } 
+    }).then(
       this._response()
     );
   }
@@ -23,7 +27,10 @@ class Api {
   setUserInfo({ name, about }) {
     return fetch(`${this._baseUrl}/users/me`, {
       method: "PATCH",
-      headers: this._headers,
+      headers: {
+        authorization: `Bearer ${localStorage.jwt}`,
+        "Content-Type": "application/json",
+      },
       body: JSON.stringify({
         name,
         about,
@@ -34,7 +41,10 @@ class Api {
   setUserAvatar({ avatar }) {
     return fetch(`${this._baseUrl}/users/me/avatar`, {
       method: "PATCH",
-      headers: this._headers,
+      headers: {
+        authorization: `Bearer ${localStorage.jwt}`,
+        "Content-Type": "application/json",
+      },
       body: JSON.stringify({
         avatar,
       }),
@@ -43,21 +53,30 @@ class Api {
 
   getItems() {
     return fetch(`${this._baseUrl}/cards`, {
-      headers: this._headers,
+      headers: {
+        authorization: `Bearer ${localStorage.jwt}`,
+        "Content-Type": "application/json",
+      },
     }).then(this._response());
   }
 
   deleteItem(itemId) {
     return fetch(`${this._baseUrl}/cards/${itemId}`, {
       method: "DELETE",
-      headers: this._headers,
+      headers: {
+        authorization: `Bearer ${localStorage.jwt}`,
+        "Content-Type": "application/json",
+      },
     }).then(this._response());
   }
 
   setPlace({ name, link }) {
     return fetch(`${this._baseUrl}/cards`, {
       method: "POST",
-      headers: this._headers,
+      headers: {
+        authorization: `Bearer ${localStorage.jwt}`,
+        "Content-Type": "application/json",
+      },
       body: JSON.stringify({
         name,
         link,
@@ -68,17 +87,16 @@ class Api {
   toggleLike(itemId, isLiked) {
     return fetch(`${this._baseUrl}/cards/likes/${itemId}`, {
       method: isLiked ? "DELETE" : "PUT",
-      headers: this._headers,
+      headers: {
+        authorization: `Bearer ${localStorage.jwt}`,
+        "Content-Type": "application/json",
+      },
     }).then(this._response());
   }
 }
 
 const api = new Api({
-  baseUrl: `https://mesto.nomoreparties.co/v1/cohort-14`,
-  headers: {
-    authorization: "8916ab4b-9a09-4a8e-86cf-42a282e45a8c",
-    "Content-Type": "application/json",
-  },
+  baseUrl: `http://api.denisk.students.nomoreparties.xyz`,
 });
 
 export default api;

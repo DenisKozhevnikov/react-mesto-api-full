@@ -32,6 +32,7 @@ function EditProfilePopup({ isOpen, onClose, onUpdateUser }) {
     >
       <fieldset className="form__inputs">
         <input
+          autoComplete="off"
           id="name-input"
           type="text"
           className="form__input popup__item_name"
@@ -45,6 +46,7 @@ function EditProfilePopup({ isOpen, onClose, onUpdateUser }) {
         />
         <span id="name-input-error" className="form__error" />
         <input
+          autoComplete="off"
           id="about-me-input"
           type="text"
           className="form__input popup__item_about-me"

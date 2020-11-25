@@ -22,6 +22,7 @@ function EditProfilePopup({ isOpen, onClose, onUpdateAvatar }) {
     >
       <fieldset className="form__inputs">
         <input
+          autoComplete="off"
           ref={avatarRef}
           id="link-input-avatar"
           type="url"

@@ -1,4 +1,5 @@
-const BASE_URL = 'https://api.denisk.students.nomoreparties.xyz';
+// const BASE_URL = 'https://auth.nomoreparties.co';
+const BASE_URL = 'http://api.denisk.students.nomoreparties.xyz';
 
 const handleRequestResponse = (res) => {
   if(res.ok) {

@@ -24,6 +24,7 @@ function AddPlacePopup({ isOpen, onClose, onAddPlace }) {
     >
       <fieldset className="form__inputs">
         <input
+          autoComplete="off"
           ref={textRef}
           id="title-input"
           type="text"
@@ -36,6 +37,7 @@ function AddPlacePopup({ isOpen, onClose, onAddPlace }) {
         />
         <span id="title-input-error" className="form__error" />
         <input
+          autoComplete="off"
           ref={linkRef}
           id="link-input"
           type="url"
