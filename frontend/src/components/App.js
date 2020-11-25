@@ -33,7 +33,7 @@ function App() {
     false
   );
   const [email, setEmail] = useState("");
-  const [tok, setTok] = useState("");
+  const [userToken, setUserToken] = useState("");
   const history = useHistory();
 
   function handleEditProfileClick() {
@@ -95,7 +95,7 @@ function App() {
   }
 
   function handleCardLike(card) {
-    const isLiked = card.likes.some((i) => i._id === currentUser._id);
+    const isLiked = card.likes.some((i) => i._id === currentUser._id || i === currentUser._id);
 
     api
       .toggleLike(card._id, isLiked)
@@ -133,13 +133,12 @@ function App() {
       });
   }
 
-  function onLogin(...props) {
-    // password, email
+  function onLogin(...props) { // password, email
     onUserLogin(...props)
       .then((data) => {
         if (data) {
           setToken(data.token);
-          setTok(data.token);
+          setUserToken(data.token);
           setLoggedIn(true);
           onGetContent(data.token).then((data) => {
             if (data) {
@@ -180,7 +179,7 @@ function App() {
     if (!token) {
       return;
     }
-    setTok(token);
+    setUserToken(token);
     getContent(token);
   }
 
@@ -189,7 +188,7 @@ function App() {
   }, []);
 
   useEffect(() => {
-    if (tok) {
+    if (userToken) {
       Promise.all([api.getUserInfo(), api.getItems()])
         .then(([user, items]) => {
           setCurrentUser(user);
@@ -197,7 +196,7 @@ function App() {
         })
         .catch((err) => console.log(err));
     }
-  }, [tok]);
+  }, [userToken]);
 
   return (
     <CurrentUserContext.Provider value={currentUser}>
