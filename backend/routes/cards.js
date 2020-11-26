@@ -18,7 +18,7 @@ router.get('/', celebrate({
 router.post('/', celebrate({
   body: Joi.object().keys({
     name: Joi.string().required().min(2).max(30),
-    link: Joi.string().required().uri(),
+    link: Joi.string().required().pattern(/https?:\/\/(www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:,%_+.~#?&//=]*)/),
   }),
   headers: Joi.object().keys({
     authorization: Joi.string().required().length(179),
@@ -28,7 +28,7 @@ router.post('/', celebrate({
 
 router.delete('/:cardId', celebrate({
   params: Joi.object().keys({
-    cardId: Joi.string().required().alphanum().length(24),
+    cardId: Joi.string().required().hex().length(24),
   }),
   headers: Joi.object().keys({
     authorization: Joi.string().required().length(179),
@@ -38,7 +38,7 @@ router.delete('/:cardId', celebrate({
 
 router.put('/likes/:cardId', celebrate({
   params: Joi.object().keys({
-    cardId: Joi.string().required().alphanum().length(24),
+    cardId: Joi.string().required().hex().length(24),
   }),
   headers: Joi.object().keys({
     authorization: Joi.string().required().length(179),
@@ -48,7 +48,7 @@ router.put('/likes/:cardId', celebrate({
 
 router.delete('/likes/:cardId', celebrate({
   params: Joi.object().keys({
-    cardId: Joi.string().required().alphanum().length(24),
+    cardId: Joi.string().required().hex().length(24),
   }),
   headers: Joi.object().keys({
     authorization: Joi.string().required().length(179),

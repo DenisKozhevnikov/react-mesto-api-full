@@ -33,7 +33,6 @@ function App() {
     false
   );
   const [email, setEmail] = useState("");
-  const [userToken, setUserToken] = useState("");
   const history = useHistory();
 
   function handleEditProfileClick() {
@@ -138,7 +137,6 @@ function App() {
       .then((data) => {
         if (data) {
           setToken(data.token);
-          setUserToken(data.token);
           setLoggedIn(true);
           onGetContent(data.token).then((data) => {
             if (data) {
@@ -179,7 +177,6 @@ function App() {
     if (!token) {
       return;
     }
-    setUserToken(token);
     getContent(token);
   }
 
@@ -188,7 +185,7 @@ function App() {
   }, []);
 
   useEffect(() => {
-    if (userToken) {
+    if (loggedIn) {
       Promise.all([api.getUserInfo(), api.getItems()])
         .then(([user, items]) => {
           setCurrentUser(user);
@@ -196,7 +193,7 @@ function App() {
         })
         .catch((err) => console.log(err));
     }
-  }, [userToken]);
+  }, [loggedIn]);
 
   return (
     <CurrentUserContext.Provider value={currentUser}>

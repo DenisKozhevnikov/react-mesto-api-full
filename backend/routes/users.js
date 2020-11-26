@@ -24,7 +24,7 @@ router.get('/me', celebrate({
 
 router.get('/:userId', celebrate({
   params: Joi.object().keys({
-    userId: Joi.string().required().alphanum().length(24),
+    userId: Joi.string().required().hex().length(24),
   }),
   headers: Joi.object().keys({
     authorization: Joi.string().required().length(179),
@@ -45,7 +45,7 @@ router.patch('/me', celebrate({
 
 router.patch('/me/avatar', celebrate({
   body: Joi.object().keys({
-    avatar: Joi.string().required().uri(),
+    avatar: Joi.string().required().pattern(/https?:\/\/(www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:,%_+.~#?&//=]*)/),
   }),
   headers: Joi.object().keys({
     authorization: Joi.string().required().length(179),
