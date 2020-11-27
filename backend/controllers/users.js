@@ -5,6 +5,7 @@ const User = require('../models/user');
 const {
   BadRequestError, // 400
   NotFoundError, // 404
+  ConflictError, // 409
 } = require('../errors');
 
 const { NODE_ENV, JWT_SECRET } = process.env;
@@ -44,7 +45,7 @@ const createUser = (req, res, next) => {
   User.findOne({ email })
     .then((user) => {
       if (user) {
-        throw new BadRequestError('Пользователь с таким именем уже существует');
+        throw new ConflictError('Пользователь уже существует');
       }
       bcrypt.hash(password, 10)
         .then((hash) => User.create({
